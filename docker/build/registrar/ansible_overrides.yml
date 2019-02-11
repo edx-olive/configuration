@@ -1,6 +1,18 @@
 ---
-registrar_gunicorn_host: 127.0.0.1
-REGISTRAR_MYSQL: 'db'
-REGISTRAR_DJANGO_SETTINGS_MODULE: 'registrar.settings.devstack'
-REGISTRAR_MYSQL_MATCHER: '%'
+COMMON_GIT_PATH: 'edx'
 
+COMMON_MYSQL_MIGRATE_USER: '{{ REGISTRAR_MYSQL_USER }}'
+COMMON_MYSQL_MIGRATE_PASS: '{{ REGISTRAR_MYSQL_PASSWORD }}'
+
+REGISTRAR_MYSQL_HOST: 'edx.devstack.mysql'
+REGISTRAR_DJANGO_SETTINGS_MODULE: 'registrar.settings.devstack'
+REGISTRAR_GUNICORN_EXTRA: '--reload'
+REGISTRAR_MEMCACHE: ['edx.devstack.memcached:11211']
+REGISTRAR_EXTRA_APPS: []
+REGISTRAR_URL_ROOT: 'http://localhost:18734'
+
+edx_django_service_is_devstack: true
+
+# NOTE: The creation of demo data requires database access,
+# which we don't have when making new images.
+registrar_create_demo_data: false

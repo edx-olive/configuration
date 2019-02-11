@@ -2,28 +2,30 @@
 #
 # From the root of configuration:
 #
-# docker build -f docker/build/{{ role_name|replace("_","-") }}/Dockerfile .
+# docker build -f docker/build/registrar/Dockerfile .
 #
 # This allows the dockerfile to update /edx/app/edx_ansible/edx_ansible
 # with the currently checked-out configuration repo.
 
-FROM edxops/xenial-common:latest
+ARG BASE_IMAGE_TAG=latest
+FROM edxops/xenial-common:${BASE_IMAGE_TAG}
 MAINTAINER edxops
-
-ARG REGISTRAR_VERSION=master
-ARG REPO_OWNER=edx
+USER root
+CMD ["/edx/app/supervisor/venvs/supervisor/bin/supervisord", "-n", "--configuration", "/edx/app/supervisor/supervisord.conf"]
 
 ADD . /edx/app/edx_ansible/edx_ansible
-
 WORKDIR /edx/app/edx_ansible/edx_ansible/docker/plays
 
-COPY docker/build/registrar/ansible_overrides.yml /
-RUN sudo /edx/app/edx_ansible/venvs/edx_ansible/bin/ansible-playbook registrar.yml \
-    -c local -i '127.0.0.1,' \
-    -t 'install,assets,devstack:install' \
-    --extra-vars="@/ansible_overrides.yml" \
-    --extra-vars="REGISTRAR_VERSION=$REGISTRAR_VERSION" \
-    --extra-vars="COMMON_GIT_PATH=$REPO_OWNER"
+COPY docker/build/credentials/ansible_overrides.yml /
+COPY docker/devstack_common_ansible_overrides.yml /devstack/ansible_overrides.yml
 
-USER root 
-CMD ["/edx/app/supervisor/venvs/supervisor/bin/supervisord", "-n", "--configuration", "/edx/app/supervisor/supervisord.conf"]
+ARG OPENEDX_RELEASE=master
+ENV OPENEDX_RELEASE=${OPENEDX_RELEASE}
+RUN sudo /edx/app/edx_ansible/venvs/edx_ansible/bin/ansible-playbook credentials.yml \
+    -c local -i "127.0.0.1," \
+    -t "install,assets,devstack" \
+    --extra-vars="REGISTRAR_VERSION=${OPENEDX_RELEASE}" \
+    --extra-vars="@/ansible_overrides.yml" \
+    --extra-vars="@/devstack/ansible_overrides.yml"
+
+EXPOSE 18734
