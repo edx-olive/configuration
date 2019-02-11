@@ -45,7 +45,7 @@ REGISTRAR_LANGUAGE_COOKIE_NAME: 'openedx-language-preference'
 REGISTRAR_DATA_DIR: '{{ COMMON_DATA_DIR }}/{{ registrar_service_name }}'
 
 # TODO: Let edx_django_service manage REGISTRAR_STATIC_ROOT in phase 2.
-REGISTRAR_STATIC_ROOT: '{{ REGISTRAR_DATA_DIR }}/staticfiles'DATA_DIR }}/media'
+REGISTRAR_STATIC_ROOT: '{{ REGISTRAR_DATA_DIR }}/staticfiles'
 REGISTRAR_MEDIA_URL: '/media/'
 REGISTRAR_STATIC_URL: '/static/'
 
