@@ -559,7 +559,8 @@ rm -rf $base_dir
 
     mapping = BlockDeviceMapping()
     root_vol = BlockDeviceType(size=args.root_vol_size,
-                               volume_type='gp2')
+                               volume_type='gp2',
+                               delete_on_termination=True)
     mapping['/dev/sda1'] = root_vol
 
     ec2_args = {
