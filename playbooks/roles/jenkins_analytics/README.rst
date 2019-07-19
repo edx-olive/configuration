@@ -335,6 +335,9 @@ Currently supported analytics tasks are:
 -  ``ANSWER_DISTRIBUTION``: invokes
    ``edx.analytics.tasks.answer_dist.AnswerDistributionWorkflow`` via the
    ``AnswerDistributionWorkflow.groovy`` DSL.
+-  ``ANALYTICS_AGGREGATE_TRACKING_LOGS``: invokes
+   ``aggregate-daily-tracking-logs.sh`` via the
+   ``AggregateDailyTrackingLogs.groovy`` DSL.
 -  ``IMPORT_ENROLLMENTS_INTO_MYSQL``: invokes
    ``edx.analytics.tasks.enrollments.ImportEnrollmentsIntoMysql`` via the
    ``ImportEnrollmentsIntoMysql.groovy`` DSL.
