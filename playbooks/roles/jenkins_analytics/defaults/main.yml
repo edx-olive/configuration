@@ -203,7 +203,7 @@ jenkins_seed_job:
     - id: ANSWER_DISTRIBUTION
       enable: "{{ ANALYTICS_SCHEDULE_ANSWER_DISTRIBUTION | default(true) }}"
       extra_vars: "{{ ANALYTICS_SCHEDULE_ANSWER_DISTRIBUTION_EXTRA_VARS | default('') }}"
-    - id: ANALYTICS_AGGREGATE_TRACKING_LOGS
+    - id: AGGREGATE_TRACKING_LOGS
       enable: "{{ ANALYTICS_SCHEDULE_AGGREGATE_TRACKING_LOGS | default(true) }}"
       extra_vars: "{{ ANALYTICS_SCHEDULE_AGGREGATE_TRACKING_LOGS_EXTRA_VARS | default('') }}"
     - id: COURSE_ACTIVITY_WEEKLY
