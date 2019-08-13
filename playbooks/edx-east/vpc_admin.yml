@@ -10,7 +10,6 @@
     - user
     - jenkins_admin
     - hotg
-    - alton
     - role: datadog
       when: COMMON_ENABLE_DATADOG
     - role: splunkforwarder
