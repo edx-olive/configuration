@@ -217,5 +217,6 @@
   include: execute_jenkins_cli.yaml
   vars:
     jenkins_command_string: "build {{ jenkins_seed_job.name }} -s"
+    jenkins_ignore_cli_errors: yes
   tags:
     - jenkins-seed-job
