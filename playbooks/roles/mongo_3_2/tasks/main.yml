@@ -21,7 +21,7 @@
     - "manage"
     - "manage:start"
 
-- name: install python pymongo for mongo_user ansible module
+- name: install python pymongo for mongodb_user ansible module
   pip:
     name: pymongo
     state: present
