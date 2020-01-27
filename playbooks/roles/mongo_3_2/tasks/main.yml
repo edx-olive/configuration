@@ -172,19 +172,6 @@
     - "manage:db-replication"
     - "mongodb_key"
 
-- name: install prereqs for backup script
-  apt:
-    pkg: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - jq
-  tags:
-    - "backup:mongo"
-    - "install"
-    - "install:app-requirements"
-    - "mongo_packages"
-
 # If skip_replica_set is true, this template will not contain a replica set stanza
 # because of the fact above.
 - name: copy configuration template
@@ -200,6 +187,16 @@
     - "manage:db-replication"
     - "update_mongod_conf"
 
+# This sets the is_backup_node var by checking whether
+# mongo backups are enabled AND we're currently running against the designated mongo backup node.
+# This allows backup-related tasks below to determine whether or not they should run on the current mongo node.
+- name: determine if backup tasks should run
+  set_fact:
+    is_backup_node: true
+  when: MONGO_BACKUP_ENABLED and '{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}' == '{{ MONGO_BACKUP_NODE }}'
+  tags:
+    - "backup:mongo"
+
 - name: install logrotate configuration
   template:
     src: mongo_logrotate.j2
@@ -210,11 +207,28 @@
     - "install:app-configuration"
     - "logrotate"
 
+- name: install prereqs for backup script
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - jq
+  when:
+    - is_backup_node
+  tags:
+    - "backup:mongo"
+    - "install"
+    - "install:app-requirements"
+    - "mongo_packages"
+
 - name: install backup script
   template:
     src: backup-mongo.sh.j2
     dest: "{{ mongo_backup_script_path }}"
     mode: 0700
+  when:
+    - is_backup_node
   tags:
     - "backup:mongo"
     - "install"
@@ -229,6 +243,8 @@
     weekday: "{{ mongo_backup_cron.weekday | default('*') }}"
     job: "{{ mongo_backup_script_path }} >> {{ mongo_log_dir }}/mongo-backup.log 2>&1"
   become: yes
+  when:
+    - is_backup_node
   tags:
     - "backup:mongo"
     - "install"
@@ -239,7 +255,8 @@
     fstype: ext4
     force: true
   ignore_errors: true
-  when: "'{{ ansible_default_ipv4.address|default(ansible_all_ipv4_addresses[0]) }}' == '{{ MONGO_BACKUP_NODE }}'"
+  when:
+    - is_backup_node
   tags:
     - "backup:mongo"
     - "install"
