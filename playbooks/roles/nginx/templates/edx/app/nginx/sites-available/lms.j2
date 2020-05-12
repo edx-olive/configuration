@@ -45,6 +45,7 @@ geo $http_x_forwarded_for $embargo {
 
 server {
   # LMS configuration file for nginx, templated by ansible
+  proxy_read_timeout {{ EDXAPP_LMS_NGINX_TIMEOUT }};
 
   {% if NGINX_EDXAPP_ENABLE_S3_MAINTENANCE %}
 
