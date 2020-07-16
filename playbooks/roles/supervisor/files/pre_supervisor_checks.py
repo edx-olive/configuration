@@ -12,7 +12,7 @@ import time
 MIGRATION_COMMANDS = {
         'lms':     "/edx/bin/edxapp-migrate-lms --noinput --list",
         'cms':     "/edx/bin/edxapp-migrate-cms --noinput --list",
-        'xqueue':  "SERVICE_VARIANT=xqueue sudo -E -u xqueue {python} {code_dir}/manage.py migrate --noinput --list --settings=xqueue.aws_settings",
+        'xqueue':        ". {env_file}; sudo -E -u xqueue {python} {code_dir}/manage.py showmigrations",
         'ecommerce':     ". {env_file}; sudo -E -u ecommerce {python} {code_dir}/manage.py showmigrations",
         'insights':      ". {env_file}; sudo -E -u insights {python} {code_dir}/manage.py showmigrations",
         'analytics_api': ". {env_file}; sudo -E -u analytics_api {python} {code_dir}/manage.py showmigrations",
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     migration_args.add_argument("--edxapp-python",
             help="Path to python to use for executing migration check.")
     migration_args.add_argument("--edxapp-env",
-            help="Location of the ecommerce environment file.")
+            help="Location of the edxapp environment file.")
 
     xq_migration_args = parser.add_argument_group("xqueue_migrations",
             "Args for running xqueue migration checks.")
@@ -84,6 +84,8 @@ if __name__ == '__main__':
             help="Location of the xqueue code.")
     xq_migration_args.add_argument("--xqueue-python",
             help="Path to python to use for executing migration check.")
+    migration_args.add_argument("--xqueue-env",
+            help="Location of the xqueue environment file.")
 
     ecom_migration_args = parser.add_argument_group("ecommerce_migrations",
             "Args for running ecommerce migration checks.")
@@ -192,11 +194,16 @@ if __name__ == '__main__':
         msg = "Failed to tag volumes associated with {}: {}".format(instance_id, str(e))
         print(msg)
 
+    # We're using hawthorn.2 xqueue with the ginkgo LMS, because it doesn't require RabbitMQ.
+    # Added this to reduce the diff on changes required to this file, so it would work with
+    # the updated xqueue, but not interfere with the LMS/Studio or other services it supports.
+    ginkgo_xqueue = 0
+
     try:
         for service in services_for_instance(instance_id):
             if service in MIGRATION_COMMANDS:
                 # Do extra migration related stuff.
-                if service == 'xqueue' and args.xqueue_code_dir:
+                if service == 'xqueue' and args.xqueue_code_dir and ginkgo_xqueue:
                     cmd = MIGRATION_COMMANDS[service].format(python=args.xqueue_python,
                         code_dir=args.xqueue_code_dir)
                     if os.path.exists(args.xqueue_code_dir):
@@ -213,7 +220,8 @@ if __name__ == '__main__':
                         "credentials": {'python': args.credentials_python, 'env_file': args.credentials_env, 'code_dir': args.credentials_code_dir},
                         "discovery": {'python': args.discovery_python, 'env_file': args.discovery_env, 'code_dir': args.discovery_code_dir},
                         "insights": {'python': args.insights_python, 'env_file': args.insights_env, 'code_dir': args.insights_code_dir},
-                        "analytics_api": {'python': args.analytics_api_python, 'env_file': args.analytics_api_env, 'code_dir': args.analytics_api_code_dir}
+                        "analytics_api": {'python': args.analytics_api_python, 'env_file': args.analytics_api_env, 'code_dir': args.analytics_api_code_dir},
+                        "xqueue": {'python': args.xqueue_python, 'env_file': args.xqueue_env, 'code_dir': args.xqueue_code_dir},
                     }
 
                     if service in services and all(arg!=None for arg in services[service].values()) and service in MIGRATION_COMMANDS:
