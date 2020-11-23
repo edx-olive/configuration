@@ -6,7 +6,7 @@ FLOCK_TLD: "edx"
 XQWATCHER_COURSES:
   - COURSE: "demo"
     GIT_REPO: "https://github.com/edx/edx-demo-course"
-    GIT_REF: "master"
+    GIT_REF: "open-release/ginkgo.master"
     QUEUE_NAME: "test-pull"
     QUEUE_CONFIG:
       SERVER: "http://xqueue.{{ FLOCK_TLD }}"

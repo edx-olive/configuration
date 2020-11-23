@@ -36,26 +36,9 @@
     - install
     - install:base
 
-- name: Add the mongodb signing key
-  apt_key:
-    id: "{{ MONGODB_APT_KEY }}"
-    keyserver: "{{ MONGODB_APT_KEYSERVER }}"
-    state: present
-  tags:
-    - install
-    - install:base
-
-- name: Add the mongodb repo to the sources list
-  apt_repository:
-    repo: "{{ MONGODB_REPO }}"
-    state: present
-  tags:
-    - install
-    - install:base
-
 - name: Install mongo server and recommends
   apt:
-    name: "mongodb-org={{ mongo_version }}"
+    name: "mongodb"
     state: present
     install_recommends: yes
     force: yes

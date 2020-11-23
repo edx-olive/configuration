@@ -19,7 +19,7 @@ edx_django_service_name_devstack_logs:
 edx_django_service_git_protocol: '{{ COMMON_GIT_PROTOCOL }}'
 edx_django_service_git_domain: '{{ COMMON_GIT_MIRROR }}'
 edx_django_service_git_path: '{{ COMMON_GIT_PATH }}'
-edx_django_service_version: 'master'
+edx_django_service_version: 'pooja/cherry-pick-pymongo-upgrade'
 edx_django_service_git_identity: null
 edx_django_service_django_settings_module: null
 
