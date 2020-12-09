@@ -70,8 +70,8 @@ forum_environment:
 
 forum_user: "forum"
 forum_ruby_version: "1.9.3-p551"
-forum_source_repo: "https://github.com/edx-olive/cs_comments_service.git"
-forum_version: "opencraft-release/ginkgo.2-campus"
+forum_source_repo: "https://github.com/edx/cs_comments_service.git"
+forum_version: "master"
 
 #
 # test config

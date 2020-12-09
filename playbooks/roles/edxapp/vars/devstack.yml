@@ -15,3 +15,6 @@ edxapp_requirements_files:
   - "{{ paver_requirements_file }}"
   - "{{ development_requirements_file }}"
   - "{{ testing_requirements_file }}"
+
+edx_platform_repo: "https://{{ COMMON_GIT_MIRROR }}/edx-olive/edx-platform.git"
+edx_platform_version: 'pooja/cherry-pick-pymongo-upgrade'

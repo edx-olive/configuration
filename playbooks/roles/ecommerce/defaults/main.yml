@@ -41,7 +41,7 @@ ECOMMERCE_DATABASES:
     ATOMIC_REQUESTS: true
     CONN_MAX_AGE: 60
 
-ECOMMERCE_VERSION: "open-release/ginkgo.master"
+ECOMMERCE_VERSION: "master"
 ECOMMERCE_DJANGO_SETTINGS_MODULE: "ecommerce.settings.production"
 
 ECOMMERCE_OAUTH_URL_ROOT: '{{ EDXAPP_LMS_ROOT_URL | default("http://127.0.0.1:8000") }}/oauth2'

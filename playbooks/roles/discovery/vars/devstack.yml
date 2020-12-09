@@ -1,0 +1,2 @@
+DISCOVERY_VERSION: "open-release/ginkgo.master"
+ENABLE_DISCOVERY_METADATA_REFRESH_CRONTASK: false

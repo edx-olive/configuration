@@ -1,0 +1,2 @@
+edx_ansible_source_repo: https://github.com/edx-olive/configuration.git
+configuration_version: "opencraft-release/ginkgo.2-campus"

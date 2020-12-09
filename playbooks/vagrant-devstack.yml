@@ -14,13 +14,25 @@
     EDXAPP_OAUTH_ENFORCE_SECURE: false
     EDXAPP_LMS_BASE_SCHEME: http
     ECOMMERCE_DJANGO_SETTINGS_MODULE: "ecommerce.settings.devstack"
-    # When provisioning your devstack, we apply security updates
+    # When provisioning your devstack, we apply common security updates
     COMMON_SECURITY_UPDATES: true
-    SECURITY_UPGRADE_ON_ANSIBLE: true
+    SECURITY_UPGRADE_ON_ANSIBLE: false
     MONGO_AUTH: false
     DISCOVERY_URL_ROOT: 'http://localhost:{{ DISCOVERY_NGINX_PORT }}'
   vars_files:
     - roles/edxapp/vars/devstack.yml
+    - roles/analytics_api/vars/devstack.yml
+    - roles/common_vars/vars/devstack.yml
+    - roles/credentials/vars/devstack.yml
+    - roles/demo/vars/devstack.yml
+    - roles/discovery/vars/devstack.yml
+    - roles/ecommerce/vars/devstack.yml
+    - roles/ecomworker/vars/devstack.yml
+    - roles/edx_ansible/vars/devstack.yml
+    - roles/edx_django_service/vars/devstack.yml
+    - roles/forum/vars/devstack.yml
+    - roles/notifier/vars/devstack.yml
+    - roles/rbenv/vars/devstack.yml
   roles:
     - common
     - vhost
