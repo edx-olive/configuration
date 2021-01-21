@@ -129,6 +129,7 @@ if [[ ! -z "$identity_path" ]]; then
 fi
 
 cd configuration
+pip install --upgrade 'setuptools<45.0.0'
 pip install -r requirements.txt
 
 cd util/vpc-tools/
